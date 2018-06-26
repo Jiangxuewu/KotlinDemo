@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="LauncherTheme" parent="BaseAppTheme">
+        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/welcome</item>
+        <!--顶部通知栏透明-->
+        <item name="android:windowTranslucentStatus">true</item>
+        <!--底部返回、菜单按键透明-->
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+</resources>
