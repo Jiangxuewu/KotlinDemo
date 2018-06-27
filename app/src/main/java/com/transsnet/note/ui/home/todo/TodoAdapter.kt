@@ -24,7 +24,7 @@ open class TodoAdapter() : RecyclerView.Adapter<TodoHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoHolder {
-        return TodoHolder(viewType, View.inflate(context, R.layout.item_todo_recycle, null))
+        return TodoHolder(View.inflate(context, R.layout.item_todo_recycle, null))
     }
 
     override fun getItemCount(): Int {

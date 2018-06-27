@@ -9,10 +9,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
+import android.widget.EditText
 import android.widget.TextView
 import com.transsnet.note.BuildConfig
 import com.transsnet.note.R
-import kotlinx.android.synthetic.main.activity_main.*
+import com.transsnet.note.common.database.DB
 
 class MainActivity : AppCompatActivity(), IAdapterCallback {
 
@@ -54,42 +55,17 @@ class MainActivity : AppCompatActivity(), IAdapterCallback {
     private fun getTodoList(): List<String> {
         val list: ArrayList<String> = ArrayList<String>()
 
-        list.add("A1234567890")
-        list.add("B1234567891")
-        list.add("C234567892")
-        list.add("D1234567893123456789312345678931234567893123456789312345678931234567893")
-        list.add("E234567890")
-        list.add("F234567891")
-        list.add("G234567892")
-        list.add("H1234567893123456789312345678931234567893123456789312345678931234567893")
-        list.add("J1234567890")
-        list.add("K1234567891")
-        list.add("L1234567892")
-        list.add("M234567893123456789312345678931234567893123456789312345678931234567893")
-        list.add("N234567893123456789312345678931234567893123456789312345678931234567893")
-        list.add("O234567893123456789312345678931234567893123456789312345678931234567893")
-        list.add("P234567893123456789312345678931234567893123456789312345678931234567893")
-        list.add("1A1234567890")
-        list.add("1B1234567891")
-        list.add("1C234567892")
-        list.add("1D1234567893123456789312345678931234567893123456789312345678931234567893")
-        list.add("1E234567890")
-        list.add("1F234567891")
-        list.add("1G234567892")
-        list.add("1H1234567893123456789312345678931234567893123456789312345678931234567893")
-        list.add("1J1234567890")
-        list.add("1K1234567891")
-        list.add("1L1234567892")
-        list.add("1M234567893123456789312345678931234567893123456789312345678931234567893")
-        list.add("1N234567893123456789312345678931234567893123456789312345678931234567893")
-        list.add("1O234567893123456789312345678931234567893123456789312345678931234567893")
-        list.add("1P234567893123456789312345678931234567893123456789312345678931234567893")
+        DB.getDaoSession()?.taskDao?.queryBuilder()?.list()?.let {
+            for (item in it){
+                list.add(item.content)
+            }
+        }
 
         return list
     }
 
     private fun initViews() {
-        helloTV = text_hello
+        helloTV = this.findViewById<TextView>(R.id.text_hello)
     }
 
     override fun onBackPressed() {
@@ -118,5 +94,9 @@ class MainActivity : AppCompatActivity(), IAdapterCallback {
     }
 
     override fun doubleClick(itemView: View?, position: Int) {
+    }
+
+    override fun onTextChanged(editText: EditText, s: CharSequence, start: Int, before: Int, count: Int) {
+
     }
 }

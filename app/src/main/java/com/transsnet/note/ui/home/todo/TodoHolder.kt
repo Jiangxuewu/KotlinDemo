@@ -5,36 +5,41 @@ import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import com.bb_sz.lib.view.listener.ViewDoubleSingleClickListener
 import com.transsnet.note.App
 import com.transsnet.note.R
-import org.w3c.dom.Text
 
 /**
  * Created by Jiangxuewu on 2018/6/26.
  */
 class TodoHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
 
-    private var inputText: EditText? = null
-    private var inputTextTV: TextView? = null
+    private var callback: IAdapterCallback? = null
+
+//    companion object {
+//        var callback: IAdapterCallback? = null
+//    }
+
+    private val inputText: EditText? by lazy {
+        itemView?.findViewById<EditText>(R.id.todo_input)
+    }
+    private val inputTextTV: TextView? by lazy {
+        itemView?.findViewById<TextView>(R.id.todo_input_tv)
+    }
     private var editNeedShowInput: Boolean = false
 
-    constructor(viewType: Int, itemView: View?) : this(itemView) {
-        inputText = itemView?.findViewById(R.id.todo_input)
-        inputTextTV = itemView?.findViewById(R.id.todo_input_tv)
-
+    init {
         inputText?.let {
-            it.viewTreeObserver.addOnGlobalLayoutListener({
+            it.viewTreeObserver.addOnGlobalLayoutListener {
                 if (editNeedShowInput) {
                     val imm = App.instance?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.showSoftInput(it, 0)
                     editNeedShowInput = false
                 }
-            })
+            }
 
             it.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
@@ -42,7 +47,7 @@ class TodoHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
                 }
 
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    
+                    callback?.onTextChanged(it, s, start, before, count)
                 }
 
                 override fun afterTextChanged(s: Editable) {
@@ -54,6 +59,9 @@ class TodoHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
 
     fun initData(itemValue: String?, position: Int, callback: IAdapterCallback?, singleClickPosition: Int?) {
 
+        if (this.callback != callback) {
+            this.callback = callback
+        }
 
         if (isInput(position, singleClickPosition)) {
             inputTextTV?.let {
@@ -62,6 +70,7 @@ class TodoHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
             }
 
             inputText?.let {
+                it.tag = position
                 it.setText(itemValue ?: "")
                 val res = it.requestFocus()
                 it.isCursorVisible = true
@@ -96,6 +105,7 @@ class TodoHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
     private fun isInput(position: Int, singleClickPosition: Int?): Boolean {
         return position == singleClickPosition && singleClickPosition >= 0
     }
+
 
     class ItemClickListener(itemView: View?, position: Int) : ViewDoubleSingleClickListener(itemView, position) {
 
