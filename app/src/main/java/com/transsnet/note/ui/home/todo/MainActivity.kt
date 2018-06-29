@@ -11,11 +11,13 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import com.bb_sz.lib.keyboard.SoftKeyBoardListener
 import com.transsnet.note.BuildConfig
 import com.transsnet.note.R
 import com.transsnet.note.common.database.DB
+import com.transsnet.note.model.structure.Task
 
-class MainActivity : AppCompatActivity(), IAdapterCallback {
+class MainActivity : AppCompatActivity(), IAdapterCallback, SoftKeyBoardListener.OnSoftKeyBoardChangeListener {
 
 
     private val TAG = "MainActivity"
@@ -39,26 +41,34 @@ class MainActivity : AppCompatActivity(), IAdapterCallback {
         setContentView(R.layout.activity_main)
 
         initViews()
-        initData()
+        updateTodoList()
+
+        SoftKeyBoardListener.setListener(this, this)
     }
 
-    private fun initData() {
+    private fun updateTodoList() {
+        val list: List<Task> = getTodoList()
+        if (null == adapter) {
+            adapter = TodoAdapter(this, list, this)
+            recyclerView.layoutManager = LinearLayoutManager(this)
 
-        adapter = TodoAdapter(this, getTodoList(), this)
-
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        recyclerView.adapter = adapter
-
+            recyclerView.adapter = adapter
+            if (BuildConfig.DEBUG) {
+                Log.i("Main", "updateTodoList, set adapter list is ${list.size}")
+            }
+        } else {
+            adapter?.update(list)
+            if (BuildConfig.DEBUG) {
+                Log.i("Main", "updateTodoList, update list is ${list.size}")
+            }
+        }
     }
 
-    private fun getTodoList(): List<String> {
-        val list: ArrayList<String> = ArrayList<String>()
+    private fun getTodoList(): List<Task> {
+        val list: ArrayList<Task> = ArrayList<Task>()
 
         DB.getDaoSession()?.taskDao?.queryBuilder()?.list()?.let {
-            for (item in it){
-                list.add(item.content)
-            }
+            return it
         }
 
         return list
@@ -94,9 +104,35 @@ class MainActivity : AppCompatActivity(), IAdapterCallback {
     }
 
     override fun doubleClick(itemView: View?, position: Int) {
+
     }
 
     override fun onTextChanged(editText: EditText, s: CharSequence, start: Int, before: Int, count: Int) {
+        if (editText.tag is Long) {
+            val _id: Long = editText.tag as Long
 
+            if (BuildConfig.DEBUG) {
+                Log.i("Main", "onTextChanged, update _id is $_id")
+            }
+
+            DB.getTask(_id)?.let {
+                it.content = editText.text.toString()
+
+                DB.getDaoSession()?.taskDao?.update(it)
+
+                updateTodoList()
+
+            }
+        }
+    }
+
+
+    override fun keyBoardShow(height: Int) {
+
+    }
+
+    override fun keyBoardHide(height: Int) {
+        adapter?.singleClick(-1)
+        adapter?.notifyDataSetChanged()
     }
 }

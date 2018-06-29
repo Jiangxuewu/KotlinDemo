@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/todo_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/home_title_height"
+        android:layout_marginLeft="@dimen/en_title_name_margin_left"
+        android:layout_marginStart="@dimen/en_title_name_margin_left"
+        android:gravity="center_vertical|start"
+        android:textSize="@dimen/en_title_text_size"
+        android:textStyle="bold" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/todo_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/home_title_height">
+
+    </android.support.v7.widget.RecyclerView>
+
+
+</FrameLayout>

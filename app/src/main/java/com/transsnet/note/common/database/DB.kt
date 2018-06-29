@@ -10,7 +10,6 @@ import com.transsnet.note.model.structure.Task
  * Created by Jiangxuewu on 2018/6/27.
  */
 object DB {
-    private var mInstance: DB? = null
     private var mDaoSession: DaoSession? = null
 
     fun init(context: Context, dbName: String) {
@@ -23,16 +22,16 @@ object DB {
 
     fun getDaoSession() = mDaoSession
 
-//    fun getTask(id: Long): Task? {
-//
-//        val daoSession = DB.mInstance?.getDaoSession() ?: return null
-//
-//        val dao = daoSession.taskDao ?: return null
-//
-//        val qBuilder = dao.queryBuilder() ?: return null
-//
-//        val result = qBuilder.where(TaskDao.Properties._id.eq(id)).limit(1).list()
-//
-//        return if (null == result || result.isEmpty()) null else result[0]
-//    }
+    fun getTask(id: Long): Task? {
+
+        val daoSession = getDaoSession() ?: return null
+
+        val dao = daoSession.taskDao ?: return null
+
+        val qBuilder = dao.queryBuilder() ?: return null
+
+        val result = qBuilder.where(TaskDao.Properties._id.eq(id)).limit(1).list()
+
+        return if (null == result || result.isEmpty()) null else result[0]
+    }
 }

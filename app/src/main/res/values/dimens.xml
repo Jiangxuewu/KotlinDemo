@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="home_title_height">55dp</dimen>
+    <dimen name="en_title_name_margin_left">17dp</dimen>
+    <dimen name="en_title_text_size">23dp</dimen>
+</resources>

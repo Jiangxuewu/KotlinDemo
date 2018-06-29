@@ -8,6 +8,7 @@ import com.transsnet.note.App
 import com.transsnet.note.BuildConfig
 import com.transsnet.note.common.database.DB
 import com.transsnet.note.model.structure.Task
+import com.transsnet.note.ui.home.HomeActivity
 import com.transsnet.note.ui.home.todo.MainActivity
 
 class LauncherActivity : Activity() {
@@ -17,7 +18,7 @@ class LauncherActivity : Activity() {
 
         initGuideTask()
 
-        startActivity(Intent(applicationContext, MainActivity::class.java))
+        startActivity(Intent(applicationContext, HomeActivity::class.java))
         finish()
     }
 

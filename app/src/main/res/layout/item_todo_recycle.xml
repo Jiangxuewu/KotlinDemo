@@ -22,7 +22,7 @@
             android:layout_height="match_parent"
             android:background="@null" />
 
-        <TextView
+        <com.transsnet.note.ui.home.todo.ToDoTextView
             android:id="@+id/todo_input_tv"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
